@@ -6,17 +6,13 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 05:55:45 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/03/10 01:10:28 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/03/10 08:17:06 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/fdf.h"
 
-static t_array	to_int_arr(t_string split[]);
-static unsigned int	get_y(t_string map_file);
-static void	get_map(t_string map_file, t_map *map);
-
-static void	free_2d_arr(t_string split[])
+static void	free_split(t_string split[])
 {
 	unsigned int	i;
 
@@ -26,7 +22,7 @@ static void	free_2d_arr(t_string split[])
 	free(split);
 }
 
-static unsigned int	len_2d_arr(t_string split[])
+static unsigned int	count_split(t_string split[])
 {
 	unsigned int	count;
 
@@ -66,9 +62,10 @@ static t_array	to_int_arr(t_string split[])
 	unsigned int	i;
 	t_array			arr;
 
+	arr.array = NULL;
 	if (split == NULL)
 		return (arr);
-	arr.size = len_2d_arr(split);
+	arr.size = count_split(split);
 	arr.array = (int *) ft_calloc(arr.size, sizeof(int));
 	if (arr.array == NULL)
 		return (arr);
@@ -78,7 +75,7 @@ static t_array	to_int_arr(t_string split[])
 		arr.array[i] = ft_atoi(split[i]);
 		i++;
 	}
-	free_2d_arr(split);
+	free_split(split);
 	return (arr);
 }
 
@@ -86,6 +83,7 @@ static void	get_map(t_string map_file, t_map *map)
 {
 	int				fd;
 	unsigned int	i;
+	t_string		line;
 
 	fd = open(map_file, O_RDONLY);
 	if (fd == -1)
@@ -96,7 +94,9 @@ static void	get_map(t_string map_file, t_map *map)
 	i = 0;
 	while (i < map->y)
 	{
-		map->z[i] = to_int_arr(ft_split(get_next_line(fd), ' '));
+		line = get_next_line(fd);
+		map->z[i] = to_int_arr(ft_split(line, ' '));
+		free(line);
 		if (map->z[i].array == NULL)
 		{
 			free_map(map);
@@ -109,13 +109,20 @@ static void	get_map(t_string map_file, t_map *map)
 
 void	parse(int argc, t_string argv[], t_map *map)
 {
+	unsigned int	i;
+
 	if (argc != 2)
 		ft_error(FORMAT_ERROR);
 	if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".fdf", 4) != 0)
-		ft_error(MAP_ERROR);
+		ft_error(EXT_ERROR);
 	map->y = get_y(argv[1]);
 	map->z = (t_array *) ft_calloc(map->y, sizeof(t_array));
 	if (map->z == NULL)
 		ft_error(MEM_ERROR);
 	get_map(argv[1], map);
+	map->x = map->z[0].size;
+	i = 0;
+	while (i < map->y)
+		if (map->z[i++].size != map->x)
+			ft_error(MAP_ERROR);
 }

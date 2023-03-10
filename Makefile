@@ -6,7 +6,7 @@
 #    By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/09 05:07:15 by kpuwar            #+#    #+#              #
-#    Updated: 2023/03/09 22:34:50 by kpuwar           ###   ########.fr        #
+#    Updated: 2023/03/10 08:01:34 by kpuwar           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,7 @@ SRCS = $(wildcard src/*.c)
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
-CFLAGS = 
-#-Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 
 LIBMLX	:= ./lib/mlx42

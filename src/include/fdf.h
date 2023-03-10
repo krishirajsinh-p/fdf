@@ -6,7 +6,7 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 04:18:16 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/03/10 01:10:40 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/03/10 08:00:04 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@
 usage:\t./fdf [<relative-address-of-map>]\n\
 eg:\t./fdf maps/42.fdf\n"
 
-# define MAP_ERROR "Error: a map file should have \".fdf\" extension.\n"
+# define EXT_ERROR "Error: a map file should have \".fdf\" extension.\n"
 
 # define MEM_ERROR "Error: memory allocation failed.\n"
+
+# define MAP_ERROR "Error: map is not properly formatted.\n"
 
 typedef struct s_array
 {
