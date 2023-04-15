@@ -6,7 +6,7 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 04:18:16 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/03/10 08:00:04 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/15 04:42:12 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,16 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-# define FORMAT_ERROR "client: illegal command\n\
+# define FORMAT_ERROR "fdf: illegal command\n\
 usage:\t./fdf [<relative-address-of-map>]\n\
 eg:\t./fdf maps/42.fdf\n"
 
-# define EXT_ERROR "Error: a map file should have \".fdf\" extension.\n"
+# define EXT_ERROR "ERROR: provide a map file with \".fdf\" extension.\n"
 
-# define MEM_ERROR "Error: memory allocation failed.\n"
+# define MEM_ERROR "ERROR: memory allocation failed.\n"
 
-# define MAP_ERROR "Error: map is not properly formatted.\n"
+# define MAP_ERROR "ERROR: map is not properly formatted, \
+every line should have same number of values.\n"
 
 typedef struct s_array
 {
