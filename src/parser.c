@@ -6,31 +6,11 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 05:55:45 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/04/15 10:54:52 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/15 20:36:27 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/fdf.h"
-
-static void	free_split(t_string split[])
-{
-	unsigned int	i;
-
-	i = 0;
-	while (split[i])
-		free(split[i++]);
-	free(split);
-}
-
-static unsigned int	count_split(t_string split[])
-{
-	unsigned int	count;
-
-	count = 0;
-	while (split[count])
-		count++;
-	return (count);
-}
 
 static unsigned int	get_y(t_string map_file)
 {
@@ -62,7 +42,7 @@ static t_array	to_int_arr(t_string split[])
 	arr.array = NULL;
 	if (split == NULL)
 		return (arr);
-	arr.size = count_split(split);
+	arr.size = count_elements(split);
 	arr.array = (int *) ft_calloc(arr.size, sizeof(int));
 	if (arr.array == NULL)
 		return (arr);
@@ -76,7 +56,7 @@ static t_array	to_int_arr(t_string split[])
 	return (arr);
 }
 
-static void	get_map(t_string map_file, t_map *map)
+static void	get_z(t_string map_file, t_map *map)
 {
 	short			fd;
 	unsigned int	i;
@@ -106,7 +86,6 @@ static void	check_map(t_map *map)
 {
 	unsigned int	i;
 
-	map->x = map->z[0].size;
 	i = 1;
 	while (i < map->y)
 	{
@@ -132,6 +111,7 @@ void	parse(int argc, t_string argv[], t_map *map)
 	map->z = (t_array *) ft_calloc(map->y, sizeof(t_array));
 	if (map->z == NULL)
 		ft_error(MEM_ERROR, false);
-	get_map(map_file, map);
+	get_z(map_file, map);
+	map->x = map->z[0].size;
 	check_map(map);
 }
