@@ -6,7 +6,7 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 05:55:45 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/03/10 08:17:06 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/15 10:54:52 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,13 @@ static unsigned int	count_split(t_string split[])
 
 static unsigned int	get_y(t_string map_file)
 {
-	int				fd;
+	short			fd;
 	unsigned int	count;
 	t_string		line;
 
 	fd = open(map_file, O_RDONLY);
 	if (fd == -1)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("ERROR", true);
 	count = 0;
 	while (true)
 	{
@@ -81,48 +78,60 @@ static t_array	to_int_arr(t_string split[])
 
 static void	get_map(t_string map_file, t_map *map)
 {
-	int				fd;
+	short			fd;
 	unsigned int	i;
 	t_string		line;
 
 	fd = open(map_file, O_RDONLY);
 	if (fd == -1)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("ERROR", true);
 	i = 0;
 	while (i < map->y)
 	{
 		line = get_next_line(fd);
 		map->z[i] = to_int_arr(ft_split(line, ' '));
-		free(line);
+		if (line)
+			free(line);
 		if (map->z[i].array == NULL)
 		{
 			free_map(map);
-			ft_error(MEM_ERROR);
+			ft_error(MEM_ERROR, false);
 		}
 		i++;
 	}
 	close(fd);
 }
 
-void	parse(int argc, t_string argv[], t_map *map)
+static void	check_map(t_map *map)
 {
 	unsigned int	i;
 
+	map->x = map->z[0].size;
+	i = 1;
+	while (i < map->y)
+	{
+		if (map->z[i].size != map->x)
+		{
+			free_map(map);
+			ft_error(MAP_ERROR, false);
+		}
+		i++;
+	}
+}
+
+void	parse(int argc, t_string argv[], t_map *map)
+{
+	t_string	map_file;
+
 	if (argc != 2)
-		ft_error(FORMAT_ERROR);
-	if (ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".fdf", 4) != 0)
-		ft_error(EXT_ERROR);
-	map->y = get_y(argv[1]);
+		ft_error(FORMAT_ERROR, false);
+	map_file = argv[1];
+	if (ft_strncmp(map_file + ft_strlen(map_file) - 4, ".fdf", 4) != 0)
+		ft_error(EXT_ERROR, false);
+	map->y = get_y(map_file);
 	map->z = (t_array *) ft_calloc(map->y, sizeof(t_array));
 	if (map->z == NULL)
-		ft_error(MEM_ERROR);
-	get_map(argv[1], map);
-	map->x = map->z[0].size;
-	i = 0;
-	while (i < map->y)
-		if (map->z[i++].size != map->x)
-			ft_error(MAP_ERROR);
+		ft_error(MEM_ERROR, false);
+	get_map(map_file, map);
+	check_map(map);
 }

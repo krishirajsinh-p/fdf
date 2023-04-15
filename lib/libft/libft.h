@@ -6,7 +6,7 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 09:38:52 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/03/09 06:08:29 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/15 04:22:43 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include <stdio.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
@@ -24,7 +25,6 @@
 
 typedef char *	t_string;
 
-void	ft_error(const t_string msg);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
@@ -82,5 +82,7 @@ char	*get_next_line(int fd);
 int		ft_printf(const char *args, ...);
 int		ft_putchar(char c);
 int		ft_putstr(char *s);
+
+void	ft_error(const t_string msg, bool sys_error);
 
 #endif
