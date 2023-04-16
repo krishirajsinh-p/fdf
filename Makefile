@@ -6,7 +6,7 @@
 #    By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/09 05:07:15 by kpuwar            #+#    #+#              #
-#    Updated: 2023/04/16 02:17:04 by kpuwar           ###   ########.fr        #
+#    Updated: 2023/04/16 02:44:24 by kpuwar           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,12 +32,12 @@ libft:
 	@make -C $(LIBFT)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBMLX)/libmlx42.a $(LIBFT)/libft.a -I $(INCLUDES) -lglfw -L "/Users/$(USER)/goinfre/.brew/opt/glfw/lib/" -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT)/libft.a $(LIBMLX)/libmlx42.a -lglfw -L "/Users/$(USER)/goinfre/.brew/opt/glfw/lib/" -I $(INCLUDES) -o $(NAME)
 
 clean:
 	@$(RM) $(OBJS)
-	@make -C $(LIBMLX) clean
 	@make -C $(LIBFT) clean
+	@$(RM) $(LIBMLX)/libmlx42.a
 
 fclean: clean
 	@$(RM) $(NAME)
