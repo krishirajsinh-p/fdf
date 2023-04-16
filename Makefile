@@ -6,7 +6,7 @@
 #    By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/09 05:07:15 by kpuwar            #+#    #+#              #
-#    Updated: 2023/04/15 01:23:58 by kpuwar           ###   ########.fr        #
+#    Updated: 2023/04/16 02:17:04 by kpuwar           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ RM = rm -f
 all: libmlx libft $(NAME)
 
 libmlx:
-	@make -C $(LIBMLX)
+	@cmake $(LIBMLX) -B $(LIBMLX) && make -C $(LIBMLX) -j4
 
 libft:
 	@make -C $(LIBFT)
@@ -41,7 +41,6 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME)
-	@make -C $(LIBMLX) fclean
 	@make -C $(LIBFT) fclean
 
 re: fclean all
@@ -52,11 +51,11 @@ norm:
 
 brew:
 	if [ -d $(HOME)/goinfre/.brew ]; then \
-		brew update && brew install glfw; \
+		brew update && brew install glfw && brew install cmake; \
 	else \
 		git clone --depth=1 https://github.com/Homebrew/brew $(HOME)/goinfre/.brew; \
 		$(shell echo 'export PATH=$$HOME/goinfre/.brew/bin:$$PATH' >> $(HOME)/.zshrc) \
-		brew update && brew install glfw; \
+		brew update && brew install glfw && brew install cmake; \
 	fi
 
 .PHONY: all clean fclean re libmlx libft norm brew
