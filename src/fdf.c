@@ -6,42 +6,26 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 05:31:49 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/04/15 21:03:33 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/25 05:37:03 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/fdf.h"
 
-void	free_map(t_map *map)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < map->y)
-		if (map->z[i].array)
-			free(map->z[i++].array);
-	free(map->z);
-	map->z = NULL;
-}
+//dyanamic z factor and resize map if too big
+//shorten draw_line or split or make data strcuture for it and call init func
 
 int	main(int argc, t_string argv[])
 {
-	t_map	map;
+	t_data	data;
 
-	map.z = NULL;
-	parse(argc, argv, &map);
-	free_map(&map);
+	init_static_data(&data);
+	init_map(argc, argv, &data.map);
+	init_data(&data);
+	draw_map(&data);
+	if (mlx_loop_hook(data.w, ft_hook, &data))
+		mlx_loop(data.w);
+	free_data(&data);
+	system("leaks fdf");	//remove
 	exit (EXIT_SUCCESS);
 }
-
-/*
-ft_printf("x:[%d] y:[%d]\n", map.x, map.y);
-for (unsigned int i = 0; i < map.y; i++)
-{
-	for (unsigned int j = 0; j < map.x; j++)
-		printf("%d ", map.z[i].array[j]);
-	printf("\n");
-}
-
-system("leaks fdf");
-*/

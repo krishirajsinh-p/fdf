@@ -6,7 +6,7 @@
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 09:38:52 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/04/15 04:22:43 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/22 18:32:23 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,5 @@ char	*get_next_line(int fd);
 int		ft_printf(const char *args, ...);
 int		ft_putchar(char c);
 int		ft_putstr(char *s);
-
-void	ft_error(const t_string msg, bool sys_error);
 
 #endif

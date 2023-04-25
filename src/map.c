@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kpuwar <kpuwar@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 05:55:45 by kpuwar            #+#    #+#             */
-/*   Updated: 2023/04/15 20:36:27 by kpuwar           ###   ########.fr       */
+/*   Updated: 2023/04/25 03:05:34 by kpuwar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static unsigned int	get_y(t_string map_file)
 	t_string		line;
 
 	fd = open(map_file, O_RDONLY);
-	if (fd == -1)
-		ft_error("ERROR", true);
+	if (fd < 0)
+		throw_error(NULL);
 	count = 0;
 	while (true)
 	{
@@ -43,7 +43,7 @@ static t_array	to_int_arr(t_string split[])
 	if (split == NULL)
 		return (arr);
 	arr.size = count_elements(split);
-	arr.array = (int *) ft_calloc(arr.size, sizeof(int));
+	arr.array = ft_calloc(arr.size, sizeof(int));
 	if (arr.array == NULL)
 		return (arr);
 	i = 0;
@@ -63,8 +63,8 @@ static void	get_z(t_string map_file, t_map *map)
 	t_string		line;
 
 	fd = open(map_file, O_RDONLY);
-	if (fd == -1)
-		ft_error("ERROR", true);
+	if (fd < 0)
+		throw_error(NULL);
 	i = 0;
 	while (i < map->y)
 	{
@@ -73,10 +73,7 @@ static void	get_z(t_string map_file, t_map *map)
 		if (line)
 			free(line);
 		if (map->z[i].array == NULL)
-		{
-			free_map(map);
-			ft_error(MEM_ERROR, false);
-		}
+			throw_error(MEM_ERROR);
 		i++;
 	}
 	close(fd);
@@ -90,28 +87,27 @@ static void	check_map(t_map *map)
 	while (i < map->y)
 	{
 		if (map->z[i].size != map->x)
-		{
-			free_map(map);
-			ft_error(MAP_ERROR, false);
-		}
+			throw_error(MAP_ERROR);
 		i++;
 	}
 }
 
-void	parse(int argc, t_string argv[], t_map *map)
+void	init_map(int argc, t_string argv[], t_map *map)
 {
 	t_string	map_file;
 
 	if (argc != 2)
-		ft_error(FORMAT_ERROR, false);
+		throw_error(FORMAT_ERROR);
 	map_file = argv[1];
 	if (ft_strncmp(map_file + ft_strlen(map_file) - 4, ".fdf", 4) != 0)
-		ft_error(EXT_ERROR, false);
+		throw_error(EXT_ERROR);
 	map->y = get_y(map_file);
-	map->z = (t_array *) ft_calloc(map->y, sizeof(t_array));
+	map->z = ft_calloc(map->y, sizeof(t_array));
 	if (map->z == NULL)
-		ft_error(MEM_ERROR, false);
+		throw_error(MEM_ERROR);
 	get_z(map_file, map);
 	map->x = map->z[0].size;
+	if (map->y == 0 || map->x == 0)
+		throw_error(MTY_ERROR);
 	check_map(map);
 }
